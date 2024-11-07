@@ -2,37 +2,35 @@ pipeline {
     agent any
     
     stages {
-        stage('Build') {
+        stage('Declarative: Checkout SCM') {
             steps {
-                sh '''
-                    echo "Building step 1"
-                '''
+                sh 'echo "Checking out code"'
             }
         }
         
+        stage('Build') {
+            steps {
+                sh 'echo "Building..."'
+            }
+        }
+
         stage('Tests') {
             parallel {
                 stage('Unit Tests') {
                     steps {
-                        sh '''
-                            echo "Running unit tests"
-                        '''
+                        sh 'echo "Running unit tests..."'
                     }
                 }
                 
                 stage('Integration Tests') {
                     steps {
-                        sh '''
-                            echo "Running integration tests"
-                        '''
+                        sh 'echo "Running integration tests..."'
                     }
                 }
                 
                 stage('Regression tests') {
                     steps {
-                        sh '''
-                            echo "Running regression tests"
-                        '''
+                        sh 'echo "Running regression tests..."'
                     }
                 }
             }
@@ -40,19 +38,14 @@ pipeline {
         
         stage('Deploy') {
             steps {
-                sh '''
-                    echo "Deploying"
-                '''
+                sh 'echo "Deploying..."'
             }
         }
-    }
-    
-    post {
-        success {
-            echo 'Pipeline succeeded!'
-        }
-        failure {
-            echo 'Pipeline failed!'
+        
+        stage('Declarative: Post Actions') {
+            steps {
+                sh 'echo "Post actions..."'
+            }
         }
     }
 }
