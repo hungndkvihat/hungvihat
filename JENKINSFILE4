@@ -1,0 +1,20 @@
+pipeline {
+    agent {
+        label 'ubuntuNode1'
+    }
+    stages {
+        stage('one') {
+            environment { 
+                fname = 'kamal'
+            }
+            steps {
+                sh 'echo "HELLO ${fname}"'
+            }
+        }
+        stage('two') {
+            steps {
+                sh 'echo "Hello ${fname}"'
+            }
+        }
+    }
+}
