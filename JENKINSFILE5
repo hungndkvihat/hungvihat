@@ -14,23 +14,26 @@ pipeline {
             }
         }
 
-        stage('Tests') {
-            parallel {
+        stage('Parallel Tests') {     // Stage cha chứa các test song song
+            parallel {                // Block parallel để chạy song song
                 stage('Unit Tests') {
                     steps {
                         sh 'echo "Running unit tests..."'
+                        sh 'sleep 5'  // Giả lập thời gian test
                     }
                 }
                 
                 stage('Integration Tests') {
                     steps {
                         sh 'echo "Running integration tests..."'
+                        sh 'sleep 5'
                     }
                 }
                 
                 stage('Regression tests') {
                     steps {
                         sh 'echo "Running regression tests..."'
+                        sh 'sleep 5'
                     }
                 }
             }
@@ -41,11 +44,11 @@ pipeline {
                 sh 'echo "Deploying..."'
             }
         }
-        
-        stage('Declarative: Post Actions') {
-            steps {
-                sh 'echo "Post actions..."'
-            }
+    }
+    
+    post {
+        always {
+            echo 'Pipeline completed'
         }
     }
 }
