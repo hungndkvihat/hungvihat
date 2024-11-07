@@ -1,56 +1,58 @@
 pipeline {
     agent any
+    
     stages {
-        stage('pre -build') {
+        stage('Build') {
             steps {
-                bat 'echo Pre-build'
+                sh '''
+                    echo "Building step 1"
+                '''
             }
         }
-        stage('build') {
-            steps {
-                bat 'echo Build in progress.'
-            }
-        }
-        stage('Unit tests') {
-            steps {
-                bat 'echo Running unit tests'
-            }
-        }
-        stage('deploy') {
-            steps {
-                bat 'echo Deploying build'
-            }
-        }
-        stage('Regression tests') {
-            steps {
-                parallel{
-                        stage('chrome') {
-                            steps {
-                                bat 'echo Running E2E tests on chrome'
-                            }
-                        }
-                        stage('firefox') {
-                            steps {
-                                bat 'echo Running E2E tests on chrome'
-                            }
-                        }
-                        stage('safari') {
-                            steps {
-                                bat 'echo Running E2E tests on chrome'
-                            }
-                        }
+        
+        stage('Tests') {
+            parallel {
+                stage('Unit Tests') {
+                    steps {
+                        sh '''
+                            echo "Running unit tests"
+                        '''
+                    }
+                }
+                
+                stage('Integration Tests') {
+                    steps {
+                        sh '''
+                            echo "Running integration tests"
+                        '''
+                    }
+                }
+                
+                stage('Regression tests') {
+                    steps {
+                        sh '''
+                            echo "Running regression tests"
+                        '''
+                    }
                 }
             }
         }
-        stage('Release to prod') {
+        
+        stage('Deploy') {
             steps {
-                bat 'echo Releasing to prod'
+                sh '''
+                    echo "Deploying"
+                '''
             }
         }
     }
- post {
-        always {
-            echo 'Cleanup after everything!'
+    
+    post {
+        success {
+            echo 'Pipeline succeeded!'
+        }
+        failure {
+            echo 'Pipeline failed!'
         }
     }
 }
